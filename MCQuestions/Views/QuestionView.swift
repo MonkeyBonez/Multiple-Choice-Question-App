@@ -28,7 +28,7 @@ public final class QuestionView: UIView {
     
     weak var delegate: QuestionViewDelegate?
     
-    var dataSource: Question? {
+    var dataSource: Question? { //triggered whenever dataSource (current question) is updated (by QuestionViewController)
         didSet {
             refreshUI()
         }
@@ -53,10 +53,10 @@ public final class QuestionView: UIView {
                                             .flexibleWidth]
         }
     }
-    public func updateScore(correct: Int, total: Int){
+    public func updateScore(correct: Int, total: Int){//updates label with current score
         scoreLabel.text = "Score: " + String(correct) + "/" + String(total)
     }
-    private func refreshUI() {
+    private func refreshUI() {//updates label with new question and buttons with new answers
         guard let ds = dataSource else { return }
         
         // Configure Question
@@ -77,7 +77,7 @@ public final class QuestionView: UIView {
             $0.layer.borderColor = UIColor.black.cgColor
         }
         
-        // Configure Answer choices
+        // Configure answer choices
         questionLabel.attributedText = attrStr
         if(ds.answers.count > 0){
             answerAButton.setTitle("A. " + ds.answers[0].answerText, for: .normal)
@@ -117,9 +117,9 @@ public final class QuestionView: UIView {
     }
     
     
-    @IBAction func selected(_ sender: UIButton) {
+    @IBAction func selected(_ sender: UIButton) {//called to check if button correct is correct answer
         guard let dataSource = dataSource else {return}
-        var isCorrect = false
+        var isCorrect = false //assume wrong (false), unless selected correct button
         switch sender {
             
                 case(answerAButton):
@@ -152,10 +152,10 @@ public final class QuestionView: UIView {
                     }
                     
         
-                default:
+                default://should not reach another button
                     break
                     }
-        delegate?.didSelectAnswer(isCorrect)
+        delegate?.didSelectAnswer(isCorrect)//passed to delegate(Question View Controller) to handle updates
     }
     
     
